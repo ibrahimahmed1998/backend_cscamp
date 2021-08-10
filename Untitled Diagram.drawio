@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-08-11T03:19:23.689Z" agent="5.0 (X11)" etag="OWUxo4EbQpi0Q_l43Rja" version="14.9.6" type="github">
+<mxfile host="app.diagrams.net" modified="2021-08-11T03:20:33.432Z" agent="5.0 (X11)" etag="M7JmamvvA9mhbJXJ-p6E" version="14.9.6" type="github">
   <diagram id="R2lEEEUBdFMjLlhIrx00" name="Page-1">
     <mxGraphModel dx="1376" dy="429" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0" extFonts="Permanent Marker^https://fonts.googleapis.com/css?family=Permanent+Marker">
       <root>
@@ -168,8 +168,8 @@
         <mxCell id="E_PUMgYAspAOLD1ddMsA-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="E_PUMgYAspAOLD1ddMsA-1" target="GOwzaC8fPC4LmMapY-Bl-20">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="E_PUMgYAspAOLD1ddMsA-1" value="حاسس اني المفروض اشيل دي" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="450" y="60" width="160" height="30" as="geometry" />
+        <mxCell id="E_PUMgYAspAOLD1ddMsA-1" value="حاسس اني المفروض اشيل البرايمري كي اللي اسمه الاي دي" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="60" width="180" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
