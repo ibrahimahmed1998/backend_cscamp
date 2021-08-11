@@ -16,6 +16,24 @@ class User extends Authenticatable
      *
      * @var array
      */
+    
+     //return a collection of the follower to that user.
+    public function followers()
+    {
+        return $this->belongsToMany(User::class,'subscriptions','id','publisher_id');
+    }
+    
+    //return the publishers that the user is subscribed to.
+    public function following()
+    {
+        return $this->belongsToMany(User::class,'subscriptions','id','subscriber_id');
+    }
+
+    //return the posts published by the user.
+    public function posts()
+    {
+        // return $this->hasMany(Post::class);
+    }
     protected $fillable = [
         'name',
         'email',
