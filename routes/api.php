@@ -4,7 +4,7 @@ use App\Http\Controllers\auth;
 use App\Http\Controllers\Authentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\UserProfileController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
