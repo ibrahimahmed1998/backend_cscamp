@@ -25,6 +25,11 @@ Route::post('/signup', [Authentication::class, 'signup']);
 Route::post('/login', [Authentication::class, 'login']);
 Route::post('/logout', [Authentication::class, 'logout']);
 
+
+//the profile of the current loged in user.
+Route::any('me', [UserProfileController::class,'me']);
+
+
 Route::get('/', function () {return view('welcome');});
 
 
