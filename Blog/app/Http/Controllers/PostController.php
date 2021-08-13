@@ -19,11 +19,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        if(Auth::check()){
+        //if(Auth::check()){
             $post=Post::all();
             //dd($post);
             return $post;
-        }
+        //}
 
     }
 
@@ -40,19 +40,18 @@ class PostController extends Controller
             $request->validate([
                 'title' => 'required',
                 'body' => 'required',
-
+                'user_id' => 'required',
 
                 ]);
-
-
-           /* $post= new Post();
+            $post= new Post();
             $post->title=$request->title;
-            $post->body=$request->body;*/
-
-            return Post::create($request->all());
+            $post->body=$request->body;
+            $post->user_id=$request->user_id;
+            $post->save();
+            return $post;
 
         }
-        else {
+       else {
             return 'Please Log in to add post';
         }
 
@@ -81,10 +80,15 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
 
-        $post=Post::find($id);
-        $post->update($request->all());
-        $post->save();
-        return response()->json([$post,'The Post has been updated'], 200);
+        Post::where('id',$id)
+        ->update([
+            'title'=>$request->input('title'),
+            'body'=>$request->input('body')
+        ]);
+        /*$post->update($request->all());
+        $post->save();*/
+        return response()->json(['The Post has been updated'],200);
+        //return response()->json([$post,'The Post has been updated'], 200);
 
     }
 

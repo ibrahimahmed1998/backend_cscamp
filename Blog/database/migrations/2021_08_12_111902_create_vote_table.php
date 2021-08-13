@@ -17,10 +17,8 @@ class CreateVoteTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->unsigned();
             $table->unsignedBigInteger('comment_id')->unsigned();
-            $table->unsignedBigInteger('post_id')->unsigned();
             $table->integer('vote_value')->signed();
             $table->foreign('comment_id')->references('id')->on('comments');
-            $table->foreign('post_id')->references('id')->on('posts');
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

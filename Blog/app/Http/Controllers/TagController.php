@@ -12,16 +12,19 @@ class TagController extends Controller
     {
 
         //if(Auth::user()){
-            $request ->validate([
-                'tag'=>'required'
-            ]);
-            $tag=new Tag();
-            //$tag->user_id=$request->user_id;
-            //$tag->post_id=$request->post_id;
-            $tag->tag=$request->tag;
-            $tag->save();
-            return $tag . response()->json(['success','The Tag has been added'],200);
+            $request->validate([
+                'tag' => 'required',
+                'user_id'=>'required',
+                'post_id'=>'required'
 
+                ]);
+            $tag= new Tag();
+            $tag->tag=$request->tag;
+            $tag->user_id=$request->user_id;
+            $tag->post_id=$request->post_id;
+            $tag->save();
+            return $tag;
+            //return Tag::create($request->all());
         //}
         /*else {
             return 'Please Log in to add tag';

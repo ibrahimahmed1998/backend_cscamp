@@ -15,13 +15,6 @@ class AuthController extends Controller
 
     public function signup(Request $request){
 
-        //$token = $request->bearerToken();
-
-        /*if ($token){
-
-            $user = User::where('remember_token',$token )->first();
-         }*/
-
          $fields = $request->validate([
                     'name' => 'required|min:3|max:20|string',
                     'email' => 'required|email:rfc,dns|unique:users',
@@ -38,11 +31,10 @@ class AuthController extends Controller
 
         $response=[
             'user'=>$user,
-            'token'=>$token
         ];
 
         return response($response,201);
-            //return response()->json(['success' =>$user], 201);
+
     }
 
     public function login(Request $request){
@@ -61,9 +53,9 @@ class AuthController extends Controller
         }*/
 
          $fields = $request->validate([
-                    //'name' => 'required|min:3|max:20|string',
+
                     'email' => 'required|email:rfc,dns',
-                    //'phone' => 'required|numeric|regex:/(01)\d{9}/|digits:11|unique:users,phone'
+
                 ]);
                 $user = User::where('email',$request->email)->first();
 

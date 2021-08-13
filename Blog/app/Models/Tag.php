@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tag extends Model
 {
     use HasFactory;
-    //protected $fillable =['comment','user_id'];
+    protected $fillable =['Tag'];
     public function post()
     {
         return $this->belongsTo(Post::class);

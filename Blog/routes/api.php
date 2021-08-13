@@ -33,7 +33,7 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/index', [PostController::class, 'index']);
 Route::post('/store', [PostController::class, 'store']);
 Route::get('/show/{id}', [PostController::class, 'show']);
-Route::put('/update/{title}', [PostController::class, 'update']);
+Route::post('/update/{id}', [PostController::class, 'update']);
 Route::delete('/deleteposts/{title}', [PostController::class, 'deleteposts']);
 Route::post('/addcomment', [CommentController::class, 'addcomment']);
 Route::post('/addtag', [TagController::class, 'addtag']);

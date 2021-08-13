@@ -17,8 +17,6 @@ class CreatePostTable extends Migration
             $table->id();
             $table->longText('body');
             $table->string('title');
-            //$table->string('tag');
-            //$table->longText('comment');
             $table->timestamps();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
