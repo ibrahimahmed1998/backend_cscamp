@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
+use App\Models\User;
 
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -16,9 +19,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post=Post::all();
-        //dd($post);
-        return $post;
+        if(Auth::check()){
+            $post=Post::all();
+            //dd($post);
+            return $post;
+        }
+
     }
 
     /**
@@ -29,21 +35,27 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //dd($request->all()); or
-        $request->validate([
-            'title' => 'required',
-            'body' => 'required',
-            'user_id' => 'required',
 
-            ]);
+        if(Auth::check()){
+            $request->validate([
+                'title' => 'required',
+                'body' => 'required',
 
 
-        $post= new Post();
-        $post->title=$request->title;
-        $post->body=$request->body;
-        $post->user_id=$request->user_id;
-        $post->save();
-        return $post;
+                ]);
+
+
+           /* $post= new Post();
+            $post->title=$request->title;
+            $post->body=$request->body;*/
+
+            return Post::create($request->all());
+
+        }
+        else {
+            return 'Please Log in to add post';
+        }
+
     }
 
     /**
@@ -66,22 +78,13 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
 
-        $request->validate([
-            'title' => 'required',
-            'body' => 'required|max:500',
-            'user_id' => 'required',
-
-            ]);
-        $post->title = $request->title;
-        $post->body = $request->body;
-        $post->user_id = $request->user_id;
-        //$post->published_at = $request->published_at;
-
+        $post=Post::find($id);
+        $post->update($request->all());
         $post->save();
-        return response()->json(['The Post has been updated'], 200);
+        return response()->json([$post,'The Post has been updated'], 200);
 
     }
 
@@ -91,14 +94,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteposts( $title)
+    public function deleteposts( $id)
     {
-        //dd($post);
-        /*$post->delete();
-        return response('',204);*/
+        Post::destroy($id);
 
-        $post=Post::where('title',$title);
-        $post->delete();
         return response()->json(['The Post has been deleted'],200);
     }
 }

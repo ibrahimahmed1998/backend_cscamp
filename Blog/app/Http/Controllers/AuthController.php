@@ -7,37 +7,47 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+
+
 class AuthController extends Controller
 {
     public function __construct() {  $this->middleware('auth:api', ['except' => ['signup','login']]); }
 
     public function signup(Request $request){
 
-        $token = $request->bearerToken();
+        //$token = $request->bearerToken();
 
-        if ($token){
+        /*if ($token){
 
             $user = User::where('remember_token',$token )->first();
+         }*/
 
-            if($user){ return redirect('/');  }
-         }
-
-         $request->validate(['name' => 'required|min:3|max:20|string',
-                      'email' => 'required|email:rfc,dns|unique:users',
-                      'phone' => 'required|numeric|regex:/(01)\d{9}/|digits:11|unique:users,phone']);
+         $fields = $request->validate([
+                    'name' => 'required|min:3|max:20|string',
+                    'email' => 'required|email:rfc,dns|unique:users',
+                    'phone' => 'required|numeric|regex:/(01)\d{9}/|digits:11|unique:users,phone'
+                ]);
 
         $user = User::create([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'phone'=>$request->phone,
+            'name'=>$fields['name'],
+            'email'=>$fields['email'],
+            'phone'=>$fields['phone'],
             ]);
 
-            return response()->json(['success' =>$user], 201);
+        $token=$user->api_token = Str::random(60);
+
+        $response=[
+            'user'=>$user,
+            'token'=>$token
+        ];
+
+        return response($response,201);
+            //return response()->json(['success' =>$user], 201);
     }
 
     public function login(Request $request){
 
-        $request->validate([ 'email' => 'required|email:rfc,dns|exists:users']);
+        /*$request->validate([ 'email' => 'required|email:rfc,dns|exists:users']);
 
         $user = User::where('email',$request->email)->first();
 
@@ -48,7 +58,30 @@ class AuthController extends Controller
            Auth::loginUsingId($user->id)   ;
 
            return response()->json(['success' => ["token"=>$user->api_token]],201);
-        }
+        }*/
+
+         $fields = $request->validate([
+                    //'name' => 'required|min:3|max:20|string',
+                    'email' => 'required|email:rfc,dns',
+                    //'phone' => 'required|numeric|regex:/(01)\d{9}/|digits:11|unique:users,phone'
+                ]);
+                $user = User::where('email',$request->email)->first();
+
+       /* $user = User::create([
+            //'name'=>$fields['name'],
+            'email'=>$fields['email'],
+            //'phone'=>$fields['phone'],
+            ]);*/
+
+        $token=$user->api_token = Str::random(60);
+
+        $response=[
+            'user'=>$user,
+            'token'=>$token
+        ];
+        $user=auth()->user();
+        return response($response,201);
+
     }
 
     public function logout(Request $request){
