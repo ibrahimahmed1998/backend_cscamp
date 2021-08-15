@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
-use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
 use App\Models\User;
 
@@ -36,25 +36,27 @@ class PostController extends Controller
     public function store(Request $request)
     {
 
-        if(Auth::check()){
+        // if(Auth::check()){
+
+
+            if($user = User::where('api_token',$request->bearerToken())->first())
+            {
             $request->validate([
                 'title' => 'required',
                 'body' => 'required',
-                'user_id' => 'required',
-
+                // 'user_id' => 'required',
                 ]);
             $post= new Post();
             $post->title=$request->title;
             $post->body=$request->body;
-            $post->user_id=$request->user_id;
+            $post->user_id=$user->id;
             $post->save();
-            return $post;
-
+            return response(['success' => $post]);
         }
        else {
             return 'Please Log in to add post';
         }
-
+        //$user = User::where('api_token',$request->bearerToken());
     }
 
     /**
@@ -79,7 +81,6 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         Post::where('id',$id)
         ->update([
             'title'=>$request->input('title'),
@@ -98,10 +99,22 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function deleteposts( $id)
+    public function deleteposts(Request $request, $id)
     {
-        Post::destroy($id);
-
-        return response()->json(['The Post has been deleted'],200);
+        //ensure that each user can only delete his own post.
+        if($user = User::where('api_token',$request->bearerToken())->first())
+        {
+            if(Post::find($id)->user->id == $user->id)
+            {
+                Post::destroy($id);
+            }
+            else
+            return response(['error' => 'you can only delete your own posts']);            
+        }
+        else
+        {
+            return response(['error' => 'unauthenticated']);
+        }
+        return response()->json(['success' => 'The Post has been deleted'],200);
     }
 }

@@ -66,7 +66,7 @@ class AuthController extends Controller
             ]);*/
 
         $token=$user->api_token = Str::random(60);
-
+        $user->save(); 
         $response=[
             'user'=>$user,
             'token'=>$token
@@ -77,14 +77,10 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request){
-
         $user = User::where('api_token',$request->bearerToken())->first();
-
         if($user){
-
             $user->api_token ="";
              $user->save();
-
             return response()->json(['success' =>'logout'] , 201);
         }
     }
