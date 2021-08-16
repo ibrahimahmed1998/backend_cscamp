@@ -29,4 +29,21 @@ class UserProfileController extends Controller
         else
         return response()->json(['message' => 'unauthenticated..']);
     }
+
+    public function show(User $user)
+    {
+        if($user)
+        {
+            return response()->json(
+                [
+                    'name' => $user->name,
+                    'followers' =>$user->followers,
+                    'following' =>$user->following
+                ]);
+        }
+        else
+        {
+            return response(['message' => 'There is No user with that name'],404);
+        }
+    }
 }

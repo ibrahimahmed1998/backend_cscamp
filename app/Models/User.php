@@ -32,8 +32,7 @@ class User extends Authenticatable
     //return the posts published by the user.
     public function posts()
     {
-        //uncomment this when the post model is present.
-        // return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class);
     }
     protected $fillable = [
         'name',
