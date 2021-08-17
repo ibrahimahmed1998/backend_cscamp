@@ -25,13 +25,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//signup, login and logout
 Route::post('/signup', [Authentication::class, 'signup']);
 Route::post('/login', [Authentication::class, 'login']);
 Route::post('/logout', [Authentication::class, 'logout']);
 
-
+//------------------------------------
+//post section
 Route::get('/posts', [PostController::class, 'index']);
+//input: title, body: the title has to be unique.
 Route::post('/posts', [PostController::class, 'store']);
+
 Route::get('/posts/{title}', [PostController::class, 'show']);
 Route::post('/posts/{title}/edit', [PostController::class, 'update']);
 Route::delete('/posts/{title}', [PostController::class, 'destroy']);
@@ -52,7 +56,7 @@ Route::get('/tags',[TagController::class,'index']);
 
 
 //-----------------------------------
-//user profile things.
+//user profile section.
 
 //the profile of the current loged in user.
 Route::any('me', [UserProfileController::class,'me']);

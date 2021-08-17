@@ -33,9 +33,8 @@ class PostController extends Controller
             if($user = User::where('api_token',$request->bearerToken())->first())
             {
             $request->validate([
-                'title' => 'required',
+                'title' => 'required|unique:posts,title',
                 'body' => 'required',
-                // 'user_id' => 'required',
                 ]);
             $post= new Post();
             $post->title=$request->title;
