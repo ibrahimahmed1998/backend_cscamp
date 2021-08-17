@@ -42,14 +42,14 @@ Route::delete('/posts/{title}', [PostController::class, 'destroy']);
 
 //add comment to a specific post 
 //inputs: comment, and a title in the url path.  
-Route::post("/posts/{post:title}/addComment",[CommentController::class, 'addComment']);
+Route::post("/posts/{title}/addComment",[CommentController::class, 'addComment']);
 
 //to vote for some post, replace postTitle with the title of the post
 //and you have to be logged in.
 Route::post('posts/{postTitle}/vote',[VoteController::class,'vote']);
 
 //adding a tag to existing post.
-Route::post('posts/{postTitle}/{tagName}',[TagController::class,'addTag']);
+Route::post('posts/{postTitle}/tag',[TagController::class,'addTag']);
 
 //getting all tag names in an array
 Route::get('/tags',[TagController::class,'index']);

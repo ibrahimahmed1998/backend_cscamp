@@ -11,10 +11,13 @@ use App\Models\User;
 class CommentController extends Controller
 {
 
-    public function addComment(Request $request, Post $post)
+    public function addComment(Request $request,  $postTitle)
     {
         if($user = User::where('api_token',$request->bearerToken())->first())
         {
+            $post = Post::where('title',$postTitle)->first();
+            if(!$post)return ['message' => 'there is no post with that title'];
+
             $request ->validate([
                 'comment'=>'required',
                 // 'user_id'=>'required',
