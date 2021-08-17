@@ -63,6 +63,7 @@ class PostController extends Controller
         {
             $post->comments = $post->comments;
             $post->votes = $post->votes()->count();
+            $post->tags = $post->tags()->pluck('tag');
             return $post;
         }
         else

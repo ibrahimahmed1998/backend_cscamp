@@ -19,6 +19,10 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class);
     }
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class,'post_tag','post_id','tag_id');
+    }
 
         /*
          * The roles that belong to the Post

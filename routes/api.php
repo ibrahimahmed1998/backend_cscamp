@@ -8,6 +8,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,15 @@ Route::post("/posts/{post:title}/addComment",[CommentController::class, 'addComm
 //and you have to be logged in.
 Route::post('posts/{postTitle}/vote',[VoteController::class,'vote']);
 
+//adding a tag to existing post.
+Route::post('posts/{postTitle}/{tagName}',[TagController::class,'addTag']);
+
+//getting all tag names in an array
+Route::get('/tags',[TagController::class,'index']);
+
+
+//-----------------------------------
+//user profile things.
 
 //the profile of the current loged in user.
 Route::any('me', [UserProfileController::class,'me']);

@@ -19,6 +19,16 @@ class User extends Authenticatable
      */
     
      //return a collection of the follower to that user.
+    public function publish($title, $body)
+    {
+        $post= new Post();
+        $post->title=$title;
+        $post->body=$body;
+        $post->user_id=$this->id;
+        $post->save();
+        return $post;
+    }
+    
     public function following()
     {
         return $this->belongsToMany(User::class,'subscriptions','subscriber_id','publisher_id');
