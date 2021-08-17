@@ -16,10 +16,6 @@ class Subscriptions extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            // this error took my entire day LOL, 
-            //the datatype of id is unsigned bud integer
-            // so, the foreign key that refenreces it 
-            //in another table must be the same.
             $table->unsignedBigInteger('subscriber_id');
             $table->foreign('subscriber_id')->references('id')->on('users');
 

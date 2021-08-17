@@ -30,13 +30,15 @@ class UserProfileController extends Controller
         return response()->json(['message' => 'unauthenticated..']);
     }
 
-    public function show(User $user)
+    public function show($name)
     {
+        $user = User::where('name',$name)->first();
         if($user)
         {
             return response()->json(
                 [
                     'name' => $user->name,
+                    'posts' => $user->posts,
                     'followers' =>$user->followers,
                     'following' =>$user->following
                 ]);
@@ -46,4 +48,19 @@ class UserProfileController extends Controller
             return response(['message' => 'There is No user with that name'],404);
         }
     }
+
+    public function subscribeTo(Request $request,User $user)
+    {
+        
+        $currentUser = User::where('api_token', $request->bearerToken())->first();
+        if($currentUser)
+        {
+            $currentUser->subscribeTo($user);
+            return response(['success' => 'Subscribing request has been sent.']);
+        }
+        return response(['message' => 'Unauthenticated']);
+    }
+
+
+    
 }

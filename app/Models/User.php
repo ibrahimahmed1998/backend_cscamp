@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -18,13 +19,13 @@ class User extends Authenticatable
      */
     
      //return a collection of the follower to that user.
-    public function followers()
+    public function following()
     {
         return $this->belongsToMany(User::class,'subscriptions','subscriber_id','publisher_id');
     }
     
     //return the publishers that the user is subscribed to.
-    public function following()
+    public function followers()
     {
         return $this->belongsToMany(User::class,'subscriptions','publisher_id','subscriber_id');
     }
@@ -34,6 +35,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class);
     }
+
+    //this function makes the current user subscribe to the intended user.
+    public function subscribeTo(User $user)
+    {
+        DB::table('subscriptions')->insert(
+            [
+            'subscriber_id' => $this->id,
+            'publisher_id'  =>$user->id,
+            'state'=>'waiting'
+            ]
+        );
+    }
+
+
     protected $fillable = [
         'name',
         'email',

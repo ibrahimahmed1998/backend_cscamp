@@ -45,7 +45,7 @@ class PostController extends Controller
             return response(['success' => $post]);
         }
        else {
-            return 'Please Log in to add post';
+            return ['message'=>'Unauthenticated. Please Log in to add post'];
         }
     }
 
@@ -55,11 +55,18 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($title)
     {
-        //dd($post);
-        $post= Post::findorfail($id);
-        return $post;
+        
+        $post= Post::where('title',$title)->first();
+        if($post)
+        {
+            $post->comments = $post->comments;
+            $post->votesCount = $post->votesCount();
+            return $post;
+        }
+        else
+        return response(['message' => 'there is no such a title']); 
     }
 
     /**
@@ -69,20 +76,17 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $title)
     {
         if($user = User::where('api_token',$request->bearerToken())->first())
         {
-            Post::where('id',$id)
+            Post::where('title',$title)
             ->update([
                 'title'=>$request->input('title'),
                 'body'=>$request->input('body')
             ]);
-            /*$post->update($request->all());
-            $post->save();*/
-            return response()->json(['The Post has been updated'],200);
-        }//return response()->json([$post,'The Post has been updated'], 200);
-
+            return response()->json(['success'=>'The Post has been updated'],200);
+        }
     }
 
     /**
@@ -91,21 +95,21 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, $title)
     {
         //ensure that each user can only delete his own post.
         if($user = User::where('api_token',$request->bearerToken())->first())
         {
-            if(Post::find($id)->user->id == $user->id)
+            if(Post::where('title',$title)->first()->user->id == $user->id)
             {
                 Post::destroy($id);
             }
             else
-            return response(['error' => 'you can only delete your own posts']);            
+            return response(['message' => 'you can only delete your own posts']);            
         }
         else
         {
-            return response(['error' => 'unauthenticated']);
+            return response(['message' => 'unauthenticated']);
         }
         return response()->json(['success' => 'The Post has been deleted'],200);
     }

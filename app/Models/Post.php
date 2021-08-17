@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Comment;
+use App\Models\Vote;
 class Post extends Model
 {
     use HasFactory;
@@ -18,4 +19,19 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class);
     }
+
+        /*
+         * The roles that belong to the Post
+         *
+         * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+         */
+    public function votes()
+    {
+        return $this->belongsToMany(Vote::class, 'votes', 'post_id', 'user_id');
+    }
+    public function votesCount()
+    {
+        $this->votes()->count();
+    }
+
 }
