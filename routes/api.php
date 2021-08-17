@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\VoteController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,7 +23,6 @@ use App\Http\Controllers\CommentController;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
 
 Route::post('/signup', [Authentication::class, 'signup']);
 Route::post('/login', [Authentication::class, 'login']);

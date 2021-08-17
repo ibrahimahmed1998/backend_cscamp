@@ -11,11 +11,11 @@ class Vote extends Model
 
     protected $fillable = ['post_id','user_id','vote_value'];
 
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
+    // public function user() {
+    //     return $this->belongsTo(User::class);
+    // }
 
-    public function posts() {
-        return $this->belongsTo(Post::class);
-    }
+    // public function posts() {
+    //     return $this->belongsTo(Post::class);
+    // }
 }

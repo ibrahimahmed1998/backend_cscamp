@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Vote;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Post;
+
 
 class VoteController extends Controller
 {
@@ -20,14 +23,15 @@ class VoteController extends Controller
 
         $user = User::where('api_token', $request->bearerToken())->first();
         $post = Post::where('title', $postTitle)->first();
+        if(!$post)return ['message' => 'there is no such a post with that title'];
         if($user)
         {
             $vote=new Vote();
             $vote->user_id=$user->id;
-            $vote->post_id=$post->post_id;
+            $vote->post_id=$post->id;
             $vote->vote_value=1;
             $vote->save();
-            return response(['success' => 'you voted for the post' . $post->title ]);
+            return response(['success' => 'you voted for the post with the title: ' . $post->title ]);
         }
         else
         {

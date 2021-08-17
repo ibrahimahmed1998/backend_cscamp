@@ -62,7 +62,7 @@ class PostController extends Controller
         if($post)
         {
             $post->comments = $post->comments;
-            $post->votesCount = $post->votesCount();
+            $post->votes = $post->votes()->count();
             return $post;
         }
         else
@@ -102,7 +102,7 @@ class PostController extends Controller
         {
             if(Post::where('title',$title)->first()->user->id == $user->id)
             {
-                Post::destroy($id);
+                Post::where('title',$title)->delete();
             }
             else
             return response(['message' => 'you can only delete your own posts']);            

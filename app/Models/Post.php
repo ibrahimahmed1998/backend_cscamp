@@ -27,11 +27,6 @@ class Post extends Model
          */
     public function votes()
     {
-        return $this->belongsToMany(Vote::class, 'votes', 'post_id', 'user_id');
+        return $this->belongsToMany(User::class, 'votes', 'post_id', 'user_id');
     }
-    public function votesCount()
-    {
-        $this->votes()->count();
-    }
-
 }
