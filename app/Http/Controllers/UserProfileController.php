@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 class UserProfileController extends Controller
 {
-    
+
     public function __construct()
-    {   
+    {
         //let it be for 'me' only for now.
         $this->middleware('auth:api')->only(['me']);
     }
@@ -51,7 +51,7 @@ class UserProfileController extends Controller
 
     public function subscribeTo(Request $request,User $user)
     {
-        
+
         $currentUser = User::where('api_token', $request->bearerToken())->first();
         if($currentUser)
         {
@@ -60,7 +60,4 @@ class UserProfileController extends Controller
         }
         return response(['message' => 'Unauthenticated']);
     }
-
-
-    
 }
