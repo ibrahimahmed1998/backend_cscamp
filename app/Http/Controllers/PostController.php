@@ -56,17 +56,17 @@ class PostController extends Controller
      */
     public function show($title)
     {
-        
+
         $post= Post::where('title',$title)->first();
         if($post)
         {
-            $post->comments = $post->comments;
+            $post->comments = $post->comments; ///// ?????
             $post->votes = $post->votes()->count();
             $post->tags = $post->tags()->pluck('tag');
             return $post;
         }
         else
-        return response(['message' => 'there is no such a title']); 
+        return response(['message' => 'there is no such a title']);
     }
 
     /**
@@ -105,7 +105,7 @@ class PostController extends Controller
                 Post::where('title',$title)->delete();
             }
             else
-            return response(['message' => 'you can only delete your own posts']);            
+            return response(['message' => 'you can only delete your own posts']);
         }
         else
         {
