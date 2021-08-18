@@ -14,17 +14,11 @@ class VoteController extends Controller
 
     public function vote(Request $request, $postTitle)
     {
-        // $request ->validate([
-        //     'user_id'=>'required',
-        //     //'post_id'=>'required',
-        //     'comment_id'=>'required',
-        //     'vote_value'=>'required'
-        // ]);
-
         $user = User::where('api_token', $request->bearerToken())->first();
         $post = Post::where('title', $postTitle)->first();
         if(!$post)return ['message' => 'there is no such a post with that title'];
-        if($user)
+        if(!$user)return ['message' => 'you have to login'];
+        try
         {
             $vote=new Vote();
             $vote->user_id=$user->id;
@@ -33,35 +27,27 @@ class VoteController extends Controller
             $vote->save();
             return response(['success' => 'you voted for the post with the title: ' . $post->title ]);
         }
-        else
-        {
-            return ['message' => 'you have to login'];
+        catch (\Throwable $th) {
+            if($th->errorInfo[0] = 23000)
+                return ['message' => 'you\'ve already voted to this post'];
+            else return $th;
         }
+    }
 
-
-        /*  $tag= new Tag();
-
-        $tag->user_id=$request->user_id;
-        $tag->post_id=$request->post_id;
-        $tag->tag=$request->tag;
-        $tag->save();
-        return $tag;*/
-
-
-
-        /* $vote->user_id=$request->user_id;
-        $vote->post_id=$request->post_id;
-        $comment->comment_id=$request->comment_id;
-
-        $comment->save();*/
-
-        //return Vote::create($request->all());
-
-    // }
-    /*else {
-        return 'Please Log in to vote';
-    }*/
-
-
+    public function unvote(Request $request, $postTitle)
+    {
+        $user = User::where('api_token', $request->bearerToken())->first();
+        $post = Post::where('title', $postTitle)->first();
+        if(!$post)return ['message' => 'there is no such a post with that title'];
+        if(!$user)return ['message' => 'you have to login'];
+        try {
+            $voted = Vote::where('user_id',$user->id)->where('post_id',$post->id)->delete();        
+            if($voted)
+            return response(['success' => 'you unvoted the post with the title: ' . $post->title ]);
+            else 
+            return response(['message' => 'you haven\'t voted before to be able to unvote it. ']);
+        } catch (\Throwable $th) {
+            return ['message' => $th];
+        }
     }
 }

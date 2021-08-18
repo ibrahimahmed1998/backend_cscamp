@@ -48,6 +48,7 @@ Route::post("/posts/{title}/addComment",[CommentController::class, 'addComment']
 //to vote for some post, replace postTitle with the title of the post
 //and you have to be logged in.
 Route::post('posts/{postTitle}/vote',[VoteController::class,'vote']);
+Route::post('posts/{postTitle}/unvote',[VoteController::class,'unvote']);
 
 //adding a tag to existing post.
 Route::post('posts/{postTitle}/tag',[TagController::class,'addTag']);
@@ -65,9 +66,13 @@ Route::any('me', [UserProfileController::class,'me']);
 //to show it's profile
 Route::get('users/{name}',[UserProfileController::class,'show']);
 
-//subscribe to any user.put the user name in {name}
+//to subscribe to himser.put the user name in {name}
 //to subscribe to him
-Route::post('subscribeTo/{name}',[UserProfileController::class,'subscribeTo']);
+Route::post('users/{name}/subscribe',[UserProfileController::class,'subscribe']);
+//to unsubscribe
+Route::post('users/{name}/unsubscribe',[UserProfileController::class,'unsubscribe']);
+//to know if it is subscribed. return {subscribe:true}, if it is subscribed to that user.
+Route::post('users/{name}/isSubscribed',[UserProfileController::class,'isSubscribed']);
 
 Route::redirect('/', 'posts', 301);
 

@@ -28,13 +28,12 @@ class User extends Authenticatable
         $post->save();
         return $post;
     }
-    
+    //return the publishers that the user is subscribed to.
     public function following()
     {
         return $this->belongsToMany(User::class,'subscriptions','subscriber_id','publisher_id');
     }
-    
-    //return the publishers that the user is subscribed to.
+    //return the followers.
     public function followers()
     {
         return $this->belongsToMany(User::class,'subscriptions','publisher_id','subscriber_id');
@@ -46,18 +45,30 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    //this function makes the current user subscribe to the intended user.
-    public function subscribeTo(User $user)
-    {
-        DB::table('subscriptions')->insert(
-            [
-            'subscriber_id' => $this->id,
-            'publisher_id'  =>$user->id,
-            'state'=>'waiting'
-            ]
-        );
-    }
-
+   //this function makes the current user subscribe to the intended user.
+   public function subscribeTo(User $user)
+   {
+       DB::table('subscriptions')->insert(
+           [
+           'subscriber_id' => $this->id,
+           'publisher_id'  =>$user->id,
+           'state'=>'waiting'
+           ]
+       );
+   }
+   public function unsubscribeTo(User $user)
+   {
+       DB::table('subscriptions')->where('subscriber_id',$this->id)
+       ->where('publisher_id',$user->id)->delete();
+   }
+   public function isSubscribedTo(User $user)
+   {
+       $sub = DB::table('subscriptions')->where('subscriber_id',$this->id)
+       ->where('publisher_id',$user->id)->first();
+       if($sub)
+           return true;
+       else return false;
+   }
 
     protected $fillable = [
         'name',
