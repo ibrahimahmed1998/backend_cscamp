@@ -21,7 +21,8 @@ class Subscriptions extends Migration
 
             $table->unsignedBigInteger('publisher_id');
             $table->foreign('publisher_id')->references('id')->on('users');
-            $table->string('state')->dafault('wating');
+            //0 for wating and 1 for accepted.
+            $table->boolean('state')->dafault('0');
         });
     }
 

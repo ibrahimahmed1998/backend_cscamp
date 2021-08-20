@@ -5,6 +5,7 @@ use App\Http\Controllers\Authentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Home\HRP;
@@ -62,23 +63,20 @@ Route::get('/tags',[TagController::class,'index']);
 
 //the profile of the current loged in user.
 Route::any('me', [UserProfileController::class,'me']);
+//get all the users name.
+Route::get('users',[UserProfileController::class,'index']);
 //view the profile of any user. put the user name in {name}
 //to show it's profile
 Route::get('users/{name}',[UserProfileController::class,'show']);
 
 //to subscribe to himser.put the user name in {name}
 //to subscribe to him
-Route::post('users/{name}/subscribe',[UserProfileController::class,'subscribe']);
+Route::post('users/{name}/subscribe',[SubscribeController::class,'subscribe']);
 //to unsubscribe
-Route::post('users/{name}/unsubscribe',[UserProfileController::class,'unsubscribe']);
+Route::post('users/{name}/unsubscribe',[SubscribeController::class,'unsubscribe']);
 //to know if it is subscribed. return {subscribe:true}, if it is subscribed to that user.
-Route::post('users/{name}/isSubscribed',[UserProfileController::class,'isSubscribed']);
+Route::post('users/{name}/isSubscribed',[SubscribeController::class,'isSubscribed']);
 
 Route::redirect('/', 'posts', 301);
 
-
 Route::get('get_posts',[HRP::class,'get_posts']);
-
-
-
-

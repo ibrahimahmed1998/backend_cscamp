@@ -18,7 +18,8 @@ class PostController extends Controller
      */
     public function index()
     {
-            $post=Post::all();
+        //get all the public posts.
+            $post=Post::where('privacy',0)->get();
             return $post;
     }
 
@@ -40,11 +41,12 @@ class PostController extends Controller
             $post->title=$request->title;
             $post->body=$request->body;
             $post->user_id=$user->id;
+            $request->privacy?$post->privacy = $request->privacy:0;
             $post->save();
             return response(['success' => $post]);
         }
        else {
-            return ['message'=>'Unauthenticated. Please Log in to add post'];
+            return response(['message'=>'Unauthenticated. Please Log in to add post'],401);
         }
     }
 

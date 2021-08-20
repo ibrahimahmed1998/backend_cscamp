@@ -52,7 +52,7 @@ class User extends Authenticatable
            [
            'subscriber_id' => $this->id,
            'publisher_id'  =>$user->id,
-           'state'=>'waiting'
+           'state'=>0
            ]
        );
    }

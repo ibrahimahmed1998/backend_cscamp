@@ -23,63 +23,38 @@ class UserProfileController extends Controller
             'name' => $user->name,
             'phone' =>$user->phone,
             'followers' =>$user->followers,
-            'following' =>$user->following
+            'following' =>$user->following,
+            'posts' => $user->posts,
         ]);
         }
         else
         return response()->json(['message' => 'unauthenticated..']);
     }
-
-    public function show($name)
+    public function index()
     {
-        $user = User::where('name',$name)->first();
+        return ['users' => User::all()->pluck('name')];        
+    }
+    public function show(Request $request,$name)
+    {
+        $user = User::where('name',$name)->first();        
         if($user)
         {
+        //to know is the loged in user is subscribed to the visited 
+        //user or not, we used a isSubscribedTo function.            
+            $currentUser = User::where('api_token', $request->bearerToken())->first();
+            $subscribed = $currentUser?$currentUser->isSubscribedTo($user):null;
             return response()->json(
                 [
                     'name' => $user->name,
-                    'posts' => $user->posts,
+                    'posts' => $subscribed?$user->posts:$user->posts()->where('privacy',0)->get(),
                     'followers' =>$user->followers,
                     'following' =>$user->following
                 ]);
+
         }
         else
         {
             return response(['message' => 'There is No user with that name'],404);
         }
-    }
-
-    public function subscribe(Request $request, $userName)
-    {
-        $user = User::where('name', $userName)->first();
-        $currentUser = User::where('api_token', $request->bearerToken())->first();
-        if(!$user)return ['message'=>'No such a user with that name'];
-        if($currentUser)
-        {
-            $currentUser->subscribeTo($user);
-            return response(['success' => 'Subscribing request has been sent.']);
-        }
-        return response(['message' => 'Unauthenticated']);
-    }
-    public function unsubscribe(Request $request, $userName)
-    {
-        $user = User::where('name', $userName)->first();
-        $currentUser = User::where('api_token', $request->bearerToken())->first();
-        if(!$user)return ['message'=>'No such a user with that name'];
-        if(!$currentUser)
-        return response(['message' => 'Unauthenticated']);
-        $currentUser->unsubscribeTo($user);
-        return response(['success' => 'unsubscribed successfully.']);
-
-    }
-
-    public function isSubscribed(Request $request, $userName)
-    {
-        $user = User::where('name', $userName)->first();
-        $currentUser = User::where('api_token', $request->bearerToken())->first();
-        if(!$user)return ['message'=>'No such a user with that name'];
-        if(!$currentUser)
-        return response(['message' => 'Unauthenticated']);
-        return ['subscribed' => $currentUser->isSubscribedTo($user)];
     }
 }

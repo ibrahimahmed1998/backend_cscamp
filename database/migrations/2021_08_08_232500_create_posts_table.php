@@ -17,6 +17,8 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->longText('body');
             $table->string('title');
+            //0 for public and 1 for subscribers only
+            $table->boolean('privacy')->default(0);
             $table->timestamps();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
