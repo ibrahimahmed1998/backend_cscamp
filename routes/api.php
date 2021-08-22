@@ -11,7 +11,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Home\HRP;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\TagController;
-
+use App\Http\Controllers\SearchController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -80,3 +80,9 @@ Route::post('users/{name}/isSubscribed',[SubscribeController::class,'isSubscribe
 Route::redirect('/', 'posts', 301);
 
 Route::get('get_posts',[HRP::class,'get_posts']);
+
+
+
+Route::get('search/tag/{tag}',[SearchController::class,'searchByTag']);
+Route::get('search/word/{word}',[SearchController::class,'searchByWord']);
+Route::get('search/user/{user}',[SearchController::class,'searchByUser']);
